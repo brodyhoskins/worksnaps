@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.files.reject! { |fn| fn.include? 'CVS' }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'httparty', '~> 0.10'
   spec.add_dependency 'activesupport', '>= 6.0.0', '< 6.3'
+  spec.add_dependency 'httparty', '~> 0.10'
+  spec.add_dependency 'timezone', '1.3.12'
 end
