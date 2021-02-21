@@ -99,13 +99,10 @@ module Worksnaps
       nil
     end
 
-    def self.lookup_by_api_id(id)
+    def self.lookup_by_api_id(id, dst:)
       TIMEZONES.each do |timezone|
         api_id = timezone.dig(:api_id)
-        if api_id == id
-          dst = ActiveSupport::TimeZone.new(timezone.dig(:activesupport_name)).tzinfo.dst?
-          return Timezone.new(api_id, dst)
-        end
+        return Timezone.new(api_id, dst) if api_id == id
       end
 
       nil
