@@ -67,7 +67,8 @@ module Worksnaps
     end
 
     def parse_user_response(response)
-      User.new(response&.dig(:user), self, @token)
+      return nil if response.dig(:user).blank?
+      User.new(response.dig(:user), self, @token)
     end
 
     def parse_projects_response(response)
