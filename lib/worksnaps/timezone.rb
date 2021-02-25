@@ -112,6 +112,10 @@ module Worksnaps
       @to_activesupport ||= ActiveSupport::TimeZone.new(@activesupport_name)
     end
 
+    def to_timezone
+      @to_timezone ||= ::Timezone.fetch(to_activesupport&.name)
+    end
+
     def to_tzinfo
       @to_tzinfo ||= to_activesupport.tzinfo
     end

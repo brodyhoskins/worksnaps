@@ -60,6 +60,10 @@ module Worksnaps
       @projects ||= parse_projects_response(commit(:projects))
     end
 
+    def strip_timezone(datetime)
+      datetime.class == Date ? datetime.to_s : datetime.to_s.sub('T', ' ')[0..-7]
+    end
+
     private
 
     def auth

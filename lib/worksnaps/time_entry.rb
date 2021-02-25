@@ -4,6 +4,7 @@ module Worksnaps
   class TimeEntry
     attr_accessor :api_response,
                   :activity_level,
+                  :client,
                   :created_at,
                   :created_on,
                   :from_timestamp,
@@ -18,7 +19,8 @@ module Worksnaps
                   :type,
                   :user
 
-    def initialize(api_response, user, project)
+    def initialize(api_response, client, user, project)
+      @client = client
       @project = project
       @timezone = user.timezone
       @type = api_response.dig(:type)
@@ -35,12 +37,20 @@ module Worksnaps
       @task_id = api_response.dig(:task_id)
       @task_name = api_response.dig(:task_name)
 
+      Time.zone = @timezone.to_activesupport.name
+
       @created_at = if api_response.dig(:logged_timestamp).blank?
                       nil
                     else
-                      Time.at(api_response.dig(:logged_timestamp).to_i).to_datetime
+                      Time.zone.parse(
+                        @client.strip_timezone(
+                          Time.at(
+                            api_response.dig('logged_timestamp').to_i
+                          )
+                        )
+                      )
                     end
-      @created_on = @created_at.blank? ? nil : @created_at.to_date
+      @created_on = @created_at.blank? ? nil : Time.zone.parse(@created_at.to_date.to_s)
     end
 
     def to_hash

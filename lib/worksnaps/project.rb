@@ -23,14 +23,26 @@ module Worksnaps
       @active
     end
 
-    def time_entries(from_datetime, to_datetime)
+    def time_entries(from, to)
       return @time_entries unless @time_entries.blank?
+
+      Time.zone = client.user.timezone.to_activesupport.name
+      from = Time.zone.parse(
+        client.strip_timezone(
+          from.to_datetime.beginning_of_day
+        ).to_s
+      )
+      to = Time.zone.parse(
+        client.strip_timezone(
+          (to.to_datetime + 1.day).beginning_of_day
+        ).to_s
+      )
 
       url = Client::API_ENDPOINTS[:project_time_entries]
       url = url.sub('%PROJECT_ID%', @id)
       url = url.sub('%USER_ID%', @client.user.id)
-      url = url.sub('%FROM_TIMESTAMP%', from_datetime.to_time.to_i.to_s)
-      url = url.sub('%TO_TIMESTAMP%', to_datetime.to_time.to_i.to_s)
+      url = url.sub('%FROM_TIMESTAMP%', from.to_i.to_s)
+      url = url.sub('%TO_TIMESTAMP%', to.to_i.to_s)
 
       @time_entries = parse_time_entries_response(@client.commit(:project_time_entries, url: url))
     end
@@ -53,7 +65,7 @@ module Worksnaps
 
       unless api_responses.blank?
         api_responses.each do |api_response|
-          time_entries << TimeEntry.new(api_response, @client.user, self)
+          time_entries << TimeEntry.new(api_response, @client, @client.user, self)
         end
 
         return time_entries
