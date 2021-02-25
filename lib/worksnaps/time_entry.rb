@@ -5,6 +5,7 @@ module Worksnaps
     attr_accessor :api_response,
                   :activity_level,
                   :created_at,
+                  :created_on,
                   :from_timestamp,
                   :minutes,
                   :notes,
@@ -39,6 +40,27 @@ module Worksnaps
                     else
                       Time.at(api_response.dig(:logged_timestamp).to_i).to_datetime
                     end
+      @created_on = @created_at.blank? ? nil : @created_at.to_date
     end
+
+    def to_hash
+      {
+        api_response: @api_response,
+        activity_level: @activity_level,
+        created_at: @created_at,
+        from_timestamp: @from_timestamp,
+        minutes: @minutes,
+        notes: @notes,
+        project: @project,
+        screenshot_thumbnail: @screenshot_thumbnail,
+        screenshot: @screenshot,
+        task_name: @task_name,
+        task_id: @task_id,
+        timezone: @timezone,
+        type: @type,
+        user: @user
+      }
+    end
+
   end
 end
