@@ -8,6 +8,7 @@ module Worksnaps
     API_ENDPOINTS = {
       profile: '/me.xml',
       projects: '/projects.xml',
+      project_minutes_worked: '/projects/%PROJECT_ID%/reports.xml?name=time_summary&from_timestamp=%FROM_TIMESTAMP%&to_timestamp=%TO_TIMESTAMP%&user_ids=%USER_ID%',
       project_time_entries: '/projects/%PROJECT_ID%/users/%USER_ID%/time_entries.xml?from_timestamp=%FROM_TIMESTAMP%&to_timestamp=%TO_TIMESTAMP%',
       project_user_assignments: '/projects/%PROJECT_ID%/user_assignments.xml'
     }.freeze
