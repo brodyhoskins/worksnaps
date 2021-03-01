@@ -8,7 +8,6 @@ module Worksnaps
                   :created_at,
                   :created_on,
                   :from_timestamp,
-                  :minutes,
                   :notes,
                   :project,
                   :screenshot_thumbnail,
@@ -29,7 +28,6 @@ module Worksnaps
       @api_response = api_response
       @activity_level = api_response.dig(:activity_level)&.to_i
       @from_timestamp = api_response.dig(:from_timestamp)
-      @minutes = api_response.dig(:duration_in_minutes)
       @notes = api_response.dig(:user_comment)
       @project = project
       @screenshot = api_response.dig(:full_resolution_url)
@@ -52,25 +50,5 @@ module Worksnaps
                     end
       @created_on = @created_at.blank? ? nil : Time.zone.parse(@created_at.to_date.to_s)
     end
-
-    def to_hash
-      {
-        api_response: @api_response,
-        activity_level: @activity_level,
-        created_at: @created_at,
-        from_timestamp: @from_timestamp,
-        minutes: @minutes,
-        notes: @notes,
-        project: @project,
-        screenshot_thumbnail: @screenshot_thumbnail,
-        screenshot: @screenshot,
-        task_name: @task_name,
-        task_id: @task_id,
-        timezone: @timezone,
-        type: @type,
-        user: @user
-      }
-    end
-
   end
 end
