@@ -23,20 +23,23 @@ module Worksnaps
       @active
     end
 
+    def minutes_worked(from, to)
+      from, to = dates_to_timestamps(from, to)
+
+      url = Client::API_ENDPOINTS[:project_minutes_worked]
+      url = url.sub('%PROJECT_ID%', @id)
+      url = url.sub('%USER_ID%', @client.user.id)
+      url = url.sub('%FROM_TIMESTAMP%', from.to_i.to_s)
+      url = url.sub('%TO_TIMESTAMP%', to.to_i.to_s)
+      url = url.sub('%USER_ID%', @client.user.id.to_s)
+
+      parse_minutes_worked_response(@client.commit(:project_minutes_worked, url: url))
+    end
+
     def time_entries(from, to)
       return @time_entries unless @time_entries.blank?
 
-      Time.zone = client.user.timezone.to_activesupport.name
-      from = Time.zone.parse(
-        client.strip_timezone(
-          from.to_datetime.beginning_of_day
-        ).to_s
-      )
-      to = Time.zone.parse(
-        client.strip_timezone(
-          (to.to_datetime + 1.day).beginning_of_day
-        ).to_s
-      )
+      from, to = dates_to_timestamps(from, to)
 
       url = Client::API_ENDPOINTS[:project_time_entries]
       url = url.sub('%PROJECT_ID%', @id)
@@ -58,6 +61,27 @@ module Worksnaps
     end
 
     private
+
+    def dates_to_timestamps(from, to)
+      Time.zone = client.user.timezone.to_activesupport.name
+
+      from = Time.zone.parse(
+        client.strip_timezone(
+          from.to_datetime.beginning_of_day
+        ).to_s
+      )
+      to = Time.zone.parse(
+        client.strip_timezone(
+          (to.to_datetime + 1.day).beginning_of_day
+        ).to_s
+      )
+
+      [ from, to ]
+    end
+
+    def parse_minutes_worked_response(response)
+      response&.dig(:time_summary, :time_entry, :duration_in_minutes).to_i
+    end
 
     def parse_time_entries_response(response)
       time_entries = []
