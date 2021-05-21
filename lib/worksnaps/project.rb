@@ -24,7 +24,6 @@ module Worksnaps
     end
 
     def minutes_worked(from, to)
-      puts 'In minutes_worked'
       from, to = dates_to_timestamps(from, to)
 
       url = Client::API_ENDPOINTS[:project_minutes_worked]
