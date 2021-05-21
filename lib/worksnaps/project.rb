@@ -24,6 +24,7 @@ module Worksnaps
     end
 
     def minutes_worked(from, to)
+      puts 'In minutes_worked'
       from, to = dates_to_timestamps(from, to)
 
       url = Client::API_ENDPOINTS[:project_minutes_worked]
@@ -80,7 +81,11 @@ module Worksnaps
     end
 
     def parse_minutes_worked_response(response)
-      response&.dig(:time_summary, :time_entry, :duration_in_minutes).to_i
+      begin
+        response&.dig(:time_summary, :time_entry, :duration_in_minutes).to_i
+      rescue StandardError
+        response&.dig(:time_summary, :time_entry).inject(0) { |sum, time_entry| sum += time_entry[:duration_in_minutes].to_i }
+      end
     end
 
     def parse_time_entries_response(response)
