@@ -8,6 +8,7 @@ module Worksnaps
                   :created_at,
                   :created_on,
                   :from_timestamp,
+                  :minutes,
                   :notes,
                   :project,
                   :screenshot_thumbnail,
@@ -28,6 +29,7 @@ module Worksnaps
       @api_response = api_response
       @activity_level = api_response.dig(:activity_level)&.to_i
       @from_timestamp = api_response.dig(:from_timestamp)
+      @minutes = api_response.dig(:duration_in_minutes)&.to_i || 0
       @notes = api_response.dig(:user_comment)
       @project = project
       @screenshot = api_response.dig(:full_resolution_url)
