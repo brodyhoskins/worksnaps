@@ -44,7 +44,9 @@ module Worksnaps
       url = Client::API_ENDPOINTS[:project_time_entries]
       url = url.sub('%PROJECT_ID%', @id)
       url = url.sub('%USER_ID%', @client.user.id)
+      url = url.sub('%FROM_DATE%', from.to_s)
       url = url.sub('%FROM_TIMESTAMP%', from.to_i.to_s)
+      url = url.sub('%TO_DATE%', from.to_s)
       url = url.sub('%TO_TIMESTAMP%', to.to_i.to_s)
 
       @time_entries = parse_time_entries_response(@client.commit(:project_time_entries, url: url))
