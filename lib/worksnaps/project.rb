@@ -65,18 +65,10 @@ module Worksnaps
     private
 
     def dates_to_timestamps(from, to)
-      Time.zone = client.user.timezone.to_activesupport.name
+      to = from + 1.day if to == from
 
-      from = Time.zone.parse(
-        client.strip_timezone(
-          from.to_datetime.beginning_of_day
-        ).to_s
-      )
-      to = Time.zone.parse(
-        client.strip_timezone(
-          (to.to_datetime + 1.day).beginning_of_day
-        ).to_s
-      )
+      from = DateTime.parse("#{client.strip_timezone(from)} 00:00:00 #{client.user.timezone.offset}")
+      to = DateTime.parse("#{client.strip_timezone(to)} 00:00:00 #{client.user.timezone.offset}")
 
       [ from, to ]
     end
