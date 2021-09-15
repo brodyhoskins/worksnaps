@@ -6,6 +6,7 @@ module Worksnaps
 
     API_PATH = 'https://api.worksnaps.com/api'
     API_ENDPOINTS = {
+      active_users: '/summary_reports.xml?name=active_user_report&from_timestamp=%FROM_TIMESTAMP%&to_timestamp=%TO_TIMESTAMP%',
       profile: '/me.xml',
       projects: '/projects.xml',
       project_minutes_worked: '/projects/%PROJECT_ID%/reports.xml?name=time_summary&from_timestamp=%FROM_TIMESTAMP%&to_timestamp=%TO_TIMESTAMP%&user_ids=%USER_ID%',
@@ -62,6 +63,16 @@ module Worksnaps
       @projects ||= parse_projects_response(commit(:projects))
     end
 
+    def active_users(from_datetime, to_datetime)
+      from_datetime = to_date - 4.hours if from_datetime == to_datetime
+
+      url = Client::API_ENDPOINTS[:active_users]
+      url = url.sub('%FROM_TIMESTAMP%', from_datetime.to_i.to_s)
+      url = url.sub('%TO_TIMESTAMP%', to_datetime.to_i.to_s)
+
+      @summary ||= parse_active_users_response(commit(:active_users, url: url), from_datetime, to_datetime)
+    end
+
     def summary(from_date, to_date)
       from_date = to_date - 1.day if from_date == to_date
 
@@ -80,6 +91,10 @@ module Worksnaps
 
     def auth
       { username: @token, password: 'ignored' }
+    end
+
+    def parse_active_users_reponse(response, from_datetime, to_datetime)
+      response
     end
 
     def parse_user_response(response)
