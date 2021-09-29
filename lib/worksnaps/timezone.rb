@@ -3,7 +3,7 @@
 module Worksnaps
   class Timezone
     TIMEZONES = [
-      { api_id: 1, offset: '-12:00', activesupport_name: 'Etc/GMT-12' },
+      { api_id: 1, offset: '-12:00', activesupport_name: 'International Date Line West' },
       { api_id: 2, offset: '-11:00', activesupport_name: 'Pacific/Midway' },
       { api_id: 3, offset: '-10:00', activesupport_name: 'Pacific/Honolulu' },
       { api_id: 4, offset: '-09:00', activesupport_name: 'America/Anchorage' },
