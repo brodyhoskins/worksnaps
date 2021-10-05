@@ -16,14 +16,12 @@ module Worksnaps
                   :task_name,
                   :task_id,
                   :timezone,
-                  :type,
                   :user
 
     def initialize(api_response, client, user, project)
       @client = client
       @project = project
       @timezone = user.timezone
-      @type = api_response.dig(:type)
       @user = user
 
       @api_response = api_response
