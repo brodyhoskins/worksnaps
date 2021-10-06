@@ -64,7 +64,7 @@ module Worksnaps
     end
 
     def active_users(from_datetime, to_datetime)
-      from_datetime = to_date - 4.hours if from_datetime == to_datetime
+      from_datetime = to_datetime - 4.hours if from_datetime == to_datetime
 
       url = Client::API_ENDPOINTS[:active_users]
       url = url.sub('%FROM_TIMESTAMP%', from_datetime.to_i.to_s)
@@ -93,7 +93,7 @@ module Worksnaps
       { username: @token, password: 'ignored' }
     end
 
-    def parse_active_users_reponse(response, from_datetime, to_datetime)
+    def parse_active_users_response(response, from_datetime, to_datetime)
       response
     end
 
