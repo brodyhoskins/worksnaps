@@ -107,7 +107,7 @@ module Worksnaps
       api_responses = response&.dig(:projects)&.to_a&.inject([]) { |arr, project| arr << project[1] }
 
       unless api_responses.blank?
-        api_responses.each do |api_response|
+        api_responses.flatten.each do |api_response|
           projects << Project.new(api_response, client = self)
         end
 
