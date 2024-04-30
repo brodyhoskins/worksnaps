@@ -27,5 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport', '>= 6.0.0', '< 7.2'
   spec.add_dependency 'httparty', '~> 0.10'
   spec.add_dependency 'rexml', '~> 3.2.5'
-  spec.add_dependency 'timezone', '1.3.25'
+  spec.add_dependency 'timezone', '1.3.26'
 end
